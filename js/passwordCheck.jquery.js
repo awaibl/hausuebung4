@@ -10,7 +10,7 @@ function PasswordChecker(wrapperId, passwordInputFieldId, passwordSubmitButtonId
     //this attributes are set with our constructor
     this.wrapperField = $(wrapperId);
     this.passwordField = $(passwordInputFieldId);
-    this.passwordSubmitButton = $(passwordSubmitButtonId);
+    this.passwordSubmitButton = $(passwordSubmitButtonId); //man braucht kein document.getELementById sondern einfach $
 
 
     var that = this; //a trick because this is a keyword and means different things in a new context! Especially when you work with events or if you call functions outside your class "this" won't mean you!
@@ -21,7 +21,7 @@ function PasswordChecker(wrapperId, passwordInputFieldId, passwordSubmitButtonId
     //if we are in the password field an enter text - JavaScript Method "onkeyup" or "onkeup" - again in our case the field this.passwordField
     //if we try to click the submit button - JavaScript Method "onclick" - in our case this.passwordSubmitButton
 
-    this.passwordField.blur(function() {
+    this.passwordField.blur(function() { // bei den Events fällt am Anfang das on weg
         //the keyword "this" is always referring to its context.
         //onblur is an event which happens in "passwordField" -> so the keyword "this" would refer to the passwordField NOT to our class
         //therefore we previously saved "this" in a variable called "that"
@@ -51,11 +51,11 @@ function PasswordChecker(wrapperId, passwordInputFieldId, passwordSubmitButtonId
 
             //if it is long enough and has a special character - everything is fine
             if(longEnough && hasSpecialChars) {
-                this.wrapperField.removeClass(this.warningClass + ' ' + this.errorClass).addClass(this.successClass);
+                this.wrapperField.removeClass(this.warningClass + ' ' + this.errorClass).addClass(this.successClass);//hier werden alle Szenarien aufgezählt und das richtige ausgewählt während im anderen Dokument nur das richtige zufinden ist
                 this.passwordSubmitButton.attr('disabled', false);
             } else if(!hasSpecialChars && longEnough) { //if it is long enough but it has no special character set class warning
                 this.wrapperField.removeClass(this.successClass + ' ' + this.errorClass).addClass(this.warningClass);
-                this.passwordSubmitButton.attr('disabled', true);
+                this.passwordSubmitButton.attr('disabled', true); // man braucht .attr und 'diabled' anstatt von .disabled
             } else { //if it is not long enough set class error
                 this.wrapperField.removeClass(this.warningClass + ' ' + this.successClass).addClass(this.errorClass);
                 this.passwordSubmitButton.attr('disabled', true);
@@ -77,7 +77,10 @@ function PasswordChecker(wrapperId, passwordInputFieldId, passwordSubmitButtonId
     this.checkForLength = function() {
         //@todo
         //have a look at javascript string methods and properties
-        return true; //this needs to be replaced!
+        if(passwordInputFieldId.length > this.minLength) return true;
+
+        else return false;
+
     };
 
     /*
@@ -87,7 +90,8 @@ function PasswordChecker(wrapperId, passwordInputFieldId, passwordSubmitButtonId
         //@todo
         //have a look at javascript string methods and properties
         //you could probably "match" it somehow
-        return true; //this needs to be replaced!
+        if (passwordInputFieldId.indexOf(this.checkForSpecialCharacters()) ) return true;
+        else return false;
     };
     //TODO 2 end
 }
